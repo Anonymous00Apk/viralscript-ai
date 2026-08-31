@@ -1,0 +1,96 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Contato | ViralScript AI</title>
+  <meta name="description" content="Fale com a equipe do ViralScript AI: dúvidas, sugestões, reportar problemas ou parcerias.">
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="/estilo.css">
+</head>
+<body>
+  <div class="container">
+
+    <header>
+      <a class="brand" href="/">
+        <div class="brand-icon" aria-hidden="true">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polygon points="13 2 3 14 12 14 11 22 21 10 12 10 13 2"></polygon></svg>
+        </div>
+        <h1>ViralScript <span>AI</span></h1>
+      </a>
+      <nav class="nav-topo">
+        <a href="/">Início</a>
+        <a href="/guia-roteiros-virais.html">Guia Viral</a>
+        <a href="/guia-chave-api-gratis.html">Chave Grátis</a>
+        <a href="/guia-plataformas.html">Plataformas</a>
+        <a href="/faq.html">FAQ</a>
+        <a href="/sobre.html">Sobre</a>
+        <a class="ativo" href="/contato.html">Contato</a>
+      </nav>
+    </header>
+
+    <article class="artigo">
+      <h1>Contato</h1>
+      <p class="meta">Respondemos em até 48 horas úteis</p>
+
+      <p>Dúvidas, sugestões de melhoria, reportar um problema ou propor parceria? Use o formulário abaixo — todas as mensagens chegam até nós.</p>
+
+      <!-- Formulário gratuito do Netlify: configure o e-mail de destino em
+           Netlify → Forms → Notification settings após o primeiro deploy -->
+      <form name="contato" method="POST" data-netlify="true" netlify-honeypot="campo-cinza">
+        <input type="hidden" name="form-name" value="contato">
+        <p style="display:none;" aria-hidden="true">
+          <label>Não preencha este campo: <input name="campo-cinza" tabindex="-1" autocomplete="off"></label>
+        </p>
+
+        <div class="form-campo">
+          <label for="nome">Seu nome:</label>
+          <input type="text" id="nome" name="nome" required maxlength="100" autocomplete="name">
+        </div>
+
+        <div class="form-campo">
+          <label for="email">Seu e-mail (para respondermos):</label>
+          <input type="email" id="email" name="email" required maxlength="150" autocomplete="email">
+        </div>
+
+        <div class="form-campo">
+          <label for="assunto">Assunto:</label>
+          <select id="assunto" name="assunto" required>
+            <option value="duvida">Dúvida sobre o app</option>
+            <option value="problema">Reportar um problema</option>
+            <option value="sugestao">Sugestão de melhoria</option>
+            <option value="parceria">Parceria / publicidade</option>
+            <option value="outro">Outro assunto</option>
+          </select>
+        </div>
+
+        <div class="form-campo">
+          <label for="mensagem">Mensagem:</label>
+          <textarea id="mensagem" name="mensagem" required maxlength="2000" placeholder="Escreva sua mensagem aqui..."></textarea>
+        </div>
+
+        <button type="submit" class="btn-cta bloco">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><line x1="22" y1="2" x2="11" y2="13"></line><polygon points="22 2 15 22 11 13 2 9 22 2"></polygon></svg>
+          Enviar Mensagem
+        </button>
+      </form>
+
+      <div class="aviso-caixa">
+        <strong>Antes de perguntar:</strong> confira se sua dúvida já não está respondida nas <a href="/faq.html">Perguntas Frequentes</a> — a resposta costuma ser mais rápida.
+      </div>
+    </article>
+
+    <footer>
+      <p>ViralScript AI — roteiros virais com a sua chave de IA. Grátis, privado e sem cadastro.</p>
+      <nav class="nav-rodape">
+        <a href="/politica-privacidade.html">Privacidade</a> ·
+        <a href="/termos-uso.html">Termos</a> ·
+        <a href="/faq.html">FAQ</a> ·
+        <a href="/contato.html">Contato</a>
+      </nav>
+    </footer>
+  </div>
+</body>
+</html>
