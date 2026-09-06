@@ -1,0 +1,96 @@
+[build]
+publish = "."
+functions = "netlify/functions"
+
+[functions]
+node_bundler = "esbuild"
+
+[functions."gerar-roteiro"]
+timeout = 26
+
+# V5.6/V5.7: geração de capa de YouTube leva tipicamente 10–30s no
+# Gemini — sem este bloco, o default de 10s mataria quase toda geração.
+[functions."gerar-imagem"]
+timeout = 26
+
+[[redirects]]
+from = "/api/gerar"
+to = "/.netlify/functions/gerar-roteiro"
+status = 200
+
+# V5.6/V5.7: ponte do frontend (index.html) para a function de capa —
+# sem este redirect, /api/gerar-imagem responde 404 no Netlify.
+[[redirects]]
+from = "/api/gerar-imagem"
+to = "/.netlify/functions/gerar-imagem"
+status = 200
+
+# HTML: sempre validado (mudanças aparecem na hora)
+[[headers]]
+for = "/*.html"
+[headers.values]
+Cache-Control = "public, max-age=0, must-revalidate"
+
+# CSS compartilhado: 7 dias (raramente muda; revalidado por ETag)
+[[headers]]
+for = "/estilo.css"
+[headers.values]
+Cache-Control = "public, max-age=604800, must-revalidate"
+
+# config.js: cache curto — você edita esse arquivo (link do café, IDs AdSense)
+# e o visitante precisa ver a mudança em minutos, não horas
+[[headers]]
+for = "/config.js"
+[headers.values]
+Cache-Control = "public, max-age=300, must-revalidate"
+
+# manifest.json e ícones: 1 dia (identidade do PWA — muda pouco,
+# mas atualizações de ícone/nome precisam chegar em até 24h)
+[[headers]]
+for = "/manifest.json"
+[headers.values]
+Cache-Control = "public, max-age=86400, must-revalidate"
+
+[[headers]]
+for = "/icon.svg"
+[headers.values]
+Cache-Control = "public, max-age=86400, must-revalidate"
+
+# Assets novos da identidade robô: cache de 1 dia (antes ficavam
+# sem regra explícita, ao contrário dos demais ícones)
+[[headers]]
+for = "/icon-maskable.svg"
+[headers.values]
+Cache-Control = "public, max-age=86400, must-revalidate"
+
+[[headers]]
+for = "/robot.svg"
+[headers.values]
+Cache-Control = "public, max-age=86400, must-revalidate"
+
+[[headers]]
+for = "/apple-touch-icon.png"
+[headers.values]
+Cache-Control = "public, max-age=86400, must-revalidate"
+
+# sw.js: NUNCA cachear (o service worker precisa atualizar na hora
+# para controlar a versão do cache do PWA)
+[[headers]]
+for = "/sw.js"
+[headers.values]
+Cache-Control = "no-store"
+
+# API: respostas dinâmicas — nunca cachear
+[[headers]]
+for = "/api/*"
+[headers.values]
+Cache-Control = "no-store"
+
+# Segurança em todas as rotas
+[[headers]]
+for = "/*"
+[headers.values]
+X-Frame-Options = "DENY"
+X-Content-Type-Options = "nosniff"
+Referrer-Policy = "strict-origin-when-cross-origin"
+Permissions-Policy = "camera=(), microphone=(), geolocation=()"

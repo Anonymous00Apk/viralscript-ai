@@ -1,0 +1,292 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+  <meta charset="UTF-8">
+  <!-- viewport-fit=cover: necessário para o env(safe-area-inset) do rodapé -->
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover">
+  <title>Contato | ViralScript AI</title>
+  <meta name="description" content="Fale com a equipe do ViralScript AI: dúvidas, sugestões, reportar problemas ou parcerias.">
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="/estilo.css">
+
+  <style>
+    /* Dropdown de Assunto — mesmo padrão visual do seletor "Tom de Voz"
+       do app. O <select> nativo foi removido: o popup aberto é desenhado
+       pelo sistema (Chrome/Android) e foge do design system. O valor
+       selecionado vai num input hidden name="assunto" (Netlify Forms). */
+    .select-wrapper { position: relative; user-select: none; }
+
+    .select-trigger {
+      width: 100%;
+      padding: 14px 16px;
+      border-radius: 10px;
+      border: 1px solid var(--card-border);
+      background: var(--input-bg);
+      color: var(--text-main);
+      font-size: 0.9rem;
+      font-family: inherit;
+      display: flex; justify-content: space-between; align-items: center;
+      gap: 10px;
+      cursor: pointer;
+      transition: all 0.25s ease;
+      box-shadow: inset 0 2px 4px rgba(0, 0, 0, 0.2);
+      min-height: 44px;
+    }
+
+    .select-trigger span {
+      white-space: nowrap; overflow: hidden; text-overflow: ellipsis;
+    }
+
+    .select-trigger:hover { border-color: rgba(99, 102, 241, 0.5); background: rgba(15, 23, 42, 0.9); }
+
+    .select-trigger svg { flex-shrink: 0; color: var(--text-muted); transition: transform 0.3s ease; }
+
+    .select-wrapper.aberto .select-trigger {
+      border-color: var(--accent);
+      background: rgba(15, 23, 42, 0.95);
+      box-shadow: 0 0 0 4px var(--accent-glow), inset 0 2px 4px rgba(0, 0, 0, 0.2);
+    }
+
+    .select-wrapper.aberto .select-trigger svg { transform: rotate(180deg); color: var(--accent); }
+
+    .select-trigger:focus-visible { outline: 2px solid var(--accent); outline-offset: 2px; }
+
+    .select-options {
+      position: absolute;
+      top: calc(100% + 6px); left: 0; right: 0;
+      background: #0a0f1d;
+      backdrop-filter: blur(20px);
+      -webkit-backdrop-filter: blur(20px);
+      border: 1px solid rgba(99, 102, 241, 0.4);
+      border-radius: 12px;
+      box-shadow: 0 16px 40px rgba(0, 0, 0, 0.8);
+      max-height: 240px;
+      overflow-y: auto;
+      display: none;
+      z-index: 50;
+    }
+
+    .select-options::-webkit-scrollbar { width: 6px; }
+    .select-options::-webkit-scrollbar-thumb { background: rgba(99, 102, 241, 0.4); border-radius: 3px; }
+
+    .select-wrapper.aberto .select-options { display: block; }
+
+    .select-option {
+      padding: 14px 16px;
+      font-size: 0.9rem;
+      color: var(--text-main);
+      cursor: pointer;
+      transition: background 0.2s ease, color 0.2s ease, padding-left 0.2s ease;
+      border-bottom: 1px solid rgba(255, 255, 255, 0.04);
+    }
+
+    .select-option:last-child { border-bottom: none; }
+    .select-option:hover, .select-option.focado { background: rgba(99, 102, 241, 0.15); color: #ffffff; padding-left: 20px; }
+
+    .select-option.selected { background: rgba(99, 102, 241, 0.22); color: #a5b4fc; font-weight: 600; }
+    .select-option.selected::after { content: '✓'; color: var(--accent); font-weight: bold; }
+  </style>
+
+  <!-- Dados estruturados BreadcrumbList: informa a hierarquia da página ao Google -->
+  <script type="application/ld+json">
+  {
+    "@context": "https://schema.org",
+    "@type": "BreadcrumbList",
+    "itemListElement": [
+      { "@type": "ListItem", "position": 1, "name": "Início", "item": "https://SEUDOMINIO.com/" },
+      { "@type": "ListItem", "position": 2, "name": "Contato", "item": "https://SEUDOMINIO.com/contato.html" }
+    ]
+  }
+  </script>
+</head>
+<body>
+  <div class="container">
+
+    <header>
+      <a class="brand" href="/">
+        <div class="brand-icon" aria-hidden="true">
+          <img src="/robot.svg" alt="" width="32" height="32">
+        </div>
+        <h1>ViralScript <span>AI</span></h1>
+      </a>
+      <nav class="nav-topo">
+        <a href="/">Início</a>
+        <a href="/guia-roteiros-virais.html">Guia Viral</a>
+        <a href="/guia-chave-api-gratis.html">Chave Grátis</a>
+        <a href="/guia-plataformas.html">Plataformas</a>
+        <a href="/faq.html">FAQ</a>
+        <a href="/sobre.html">Sobre</a>
+        <a class="ativo" href="/contato.html">Contato</a>
+      </nav>
+    </header>
+
+    <main>
+      <article class="artigo">
+        <h1>Contato</h1>
+        <p class="meta">Respondemos em até 48 horas úteis</p>
+
+        <p>Dúvidas, sugestões de melhoria, reportar um problema ou propor parceria? Use o formulário abaixo — todas as mensagens chegam até nós.</p>
+
+        <!-- Formulário gratuito do Netlify: configure o e-mail de destino em
+             Netlify → Forms → Notification settings após o primeiro deploy -->
+        <form name="contato" method="POST" data-netlify="true" netlify-honeypot="campo-cinza">
+          <input type="hidden" name="form-name" value="contato">
+          <p style="display:none;" aria-hidden="true">
+            <label>Não preencha este campo: <input name="campo-cinza" tabindex="-1" autocomplete="off"></label>
+          </p>
+
+          <div class="form-campo">
+            <label for="nome">Seu nome:</label>
+            <input type="text" id="nome" name="nome" required maxlength="100" autocomplete="name">
+          </div>
+
+          <div class="form-campo">
+            <label for="email">Seu e-mail (para respondermos):</label>
+            <input type="email" id="email" name="email" required maxlength="150" autocomplete="email">
+          </div>
+
+          <div class="form-campo">
+            <label id="assunto-label">Assunto:</label>
+            <div class="select-wrapper" id="assunto-select">
+              <div class="select-trigger" id="assunto-trigger" tabindex="0" role="button"
+                   aria-haspopup="listbox" aria-expanded="false" aria-controls="assunto-options" aria-labelledby="assunto-label">
+                <span id="assunto-selected-text">Dúvida sobre o app</span>
+                <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><polyline points="6 9 12 15 18 9"></polyline></svg>
+              </div>
+              <div class="select-options" id="assunto-options" role="listbox" aria-labelledby="assunto-label">
+                <div class="select-option selected" role="option" aria-selected="true" data-value="duvida">Dúvida sobre o app</div>
+                <div class="select-option" role="option" aria-selected="false" data-value="problema">Reportar um problema</div>
+                <div class="select-option" role="option" aria-selected="false" data-value="sugestao">Sugestão de melhoria</div>
+                <div class="select-option" role="option" aria-selected="false" data-value="parceria">Parceria / publicidade</div>
+                <div class="select-option" role="option" aria-selected="false" data-value="outro">Outro assunto</div>
+              </div>
+              <input type="hidden" name="assunto" id="assunto" value="duvida">
+            </div>
+          </div>
+
+          <div class="form-campo">
+            <label for="mensagem">Mensagem:</label>
+            <textarea id="mensagem" name="mensagem" required maxlength="2000" placeholder="Escreva sua mensagem aqui..."></textarea>
+          </div>
+
+          <button type="submit" class="btn-cta bloco">
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><line x1="22" y1="2" x2="11" y2="13"></line><polygon points="22 2 15 22 11 13 2 9 22 2"></polygon></svg>
+            Enviar Mensagem
+          </button>
+        </form>
+
+        <div class="aviso-caixa">
+          <strong>Antes de perguntar:</strong> confira se sua dúvida já não está respondida nas <a href="/faq.html">Perguntas Frequentes</a> — a resposta costuma ser mais rápida.
+        </div>
+      </article>
+    </main>
+
+    <footer>
+      <p>ViralScript AI — roteiros virais com a sua chave de IA. Grátis, privado e sem cadastro.</p>
+      <nav class="nav-rodape">
+        <a href="/guia-roteiros-virais.html">Guias</a> ·
+        <a href="/faq.html">FAQ</a> ·
+        <a href="/politica-privacidade.html">Privacidade</a> ·
+        <a href="/termos-uso.html">Termos</a> ·
+        <a href="/contato.html">Contato</a>
+      </nav>
+    </footer>
+  </div>
+
+  <script>
+    // Dropdown de Assunto (padrão Tom de Voz do index): clique + teclado
+    // (Enter/Espaço/setas/Escape/Tab), aria-expanded no trigger e
+    // aria-activedescendant no listbox. Valor vai ao input hidden "assunto".
+    (function () {
+      var wrapper = document.getElementById('assunto-select');
+      if (!wrapper) return;
+      var trigger = document.getElementById('assunto-trigger');
+      var optionsBox = document.getElementById('assunto-options');
+      var hidden = document.getElementById('assunto');
+      var textoSelecionado = document.getElementById('assunto-selected-text');
+      var opcoes = Array.prototype.slice.call(optionsBox.querySelectorAll('.select-option'));
+      var indexAtual = 0;
+
+      for (var i = 0; i < opcoes.length; i++) {
+        if (opcoes[i].classList.contains('selected')) { indexAtual = i; break; }
+      }
+
+      function abrir() {
+        wrapper.classList.add('aberto');
+        trigger.setAttribute('aria-expanded', 'true');
+        destacar(indexAtual);
+      }
+
+      function fechar() {
+        wrapper.classList.remove('aberto');
+        trigger.setAttribute('aria-expanded', 'false');
+        opcoes.forEach(function (o) { o.classList.remove('focado'); });
+      }
+
+      function destacar(i) {
+        opcoes.forEach(function (o, idx) { o.classList.toggle('focado', idx === i); });
+        var alvo = opcoes[i];
+        if (alvo) {
+          alvo.scrollIntoView({ block: 'nearest' });
+          optionsBox.setAttribute('aria-activedescendant', alvo.id);
+        }
+      }
+
+      function selecionar(i) {
+        indexAtual = i;
+        var op = opcoes[i];
+        hidden.value = op.getAttribute('data-value');
+        textoSelecionado.textContent = op.textContent;
+        opcoes.forEach(function (o, idx) {
+          o.classList.toggle('selected', idx === i);
+          o.setAttribute('aria-selected', idx === i ? 'true' : 'false');
+        });
+        fechar();
+        trigger.focus();
+      }
+
+      opcoes.forEach(function (op, i) {
+        op.id = 'assunto-opcao-' + i;
+        op.addEventListener('click', function (e) { e.stopPropagation(); selecionar(i); });
+      });
+
+      trigger.addEventListener('click', function (e) {
+        e.stopPropagation();
+        wrapper.classList.contains('aberto') ? fechar() : abrir();
+      });
+
+      trigger.addEventListener('keydown', function (e) {
+        var aberto = wrapper.classList.contains('aberto');
+        switch (e.key) {
+          case 'Enter': case ' ':
+            e.preventDefault();
+            aberto ? selecionar(indexAtual) : abrir();
+            break;
+          case 'ArrowDown':
+            e.preventDefault();
+            if (!aberto) { abrir(); break; }
+            indexAtual = Math.min(indexAtual + 1, opcoes.length - 1);
+            destacar(indexAtual);
+            break;
+          case 'ArrowUp':
+            e.preventDefault();
+            if (!aberto) { abrir(); break; }
+            indexAtual = Math.max(indexAtual - 1, 0);
+            destacar(indexAtual);
+            break;
+          case 'Escape':
+            if (aberto) { e.preventDefault(); fechar(); }
+            break;
+          case 'Tab':
+            fechar();
+            break;
+        }
+      });
+
+      window.addEventListener('click', fechar);
+    })();
+  </script>
+</body>
+</html>
