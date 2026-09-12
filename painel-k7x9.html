@@ -1,0 +1,525 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover">
+  <title>Operações</title>
+  <meta name="robots" content="noindex, nofollow">
+  <meta name="theme-color" content="#05070f">
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600;700;800&family=JetBrains+Mono:wght@400;500&display=swap" rel="stylesheet">
+  <!-- Página privada do dono — sem AdSense, sem indexação, sem link na nav. -->
+
+  <style>
+    :root {
+      --bg: #05070f;
+      --card-bg: rgba(15, 23, 42, 0.65);
+      --card-border: rgba(255, 255, 255, 0.08);
+      --input-bg: rgba(10, 15, 29, 0.8);
+      --text-main: #f8fafc;
+      --text-muted: #94a3b8;
+      --accent-gradient: linear-gradient(135deg, #6366f1 0%, #8b5cf6 50%, #d946ef 100%);
+      --accent: #6366f1;
+      --accent-glow: rgba(99, 102, 241, 0.4);
+      --danger: #ef4444;
+    }
+
+    html, body { max-width: 100%; overflow-x: clip; }
+    * { box-sizing: border-box; -webkit-tap-highlight-color: transparent; min-width: 0; }
+
+    body {
+      font-family: 'Plus Jakarta Sans', system-ui, sans-serif;
+      background: var(--bg);
+      background-image:
+        radial-gradient(circle at 15% 15%, rgba(99, 102, 241, 0.12) 0%, transparent 40%),
+        radial-gradient(circle at 85% 85%, rgba(217, 70, 239, 0.08) 0%, transparent 40%);
+      background-attachment: fixed;
+      color: var(--text-main);
+      margin: 0;
+      padding: 36px 20px;
+      line-height: 1.5;
+      min-height: 100vh;
+      min-height: 100dvh;
+      overflow-wrap: anywhere;
+      text-align: center;
+    }
+
+    .container { max-width: 760px; margin: 0 auto; width: 100%; }
+
+    header { margin-bottom: 24px; padding-bottom: 20px; border-bottom: 1px solid var(--card-border); }
+    .brand h1 { margin: 0; font-size: 1.5rem; font-weight: 800; color: #ffffff; }
+    .brand h1 span { background: var(--accent-gradient); -webkit-background-clip: text; background-clip: text; -webkit-text-fill-color: transparent; }
+    .badge-admin {
+      display: inline-block; margin-top: 8px; padding: 4px 14px; border-radius: 30px;
+      background: rgba(239, 68, 68, 0.12); border: 1px solid rgba(239, 68, 68, 0.4);
+      color: #fca5a5; font-size: 0.7rem; font-weight: 700; letter-spacing: 1px; text-transform: uppercase;
+    }
+
+    .card {
+      background: var(--card-bg); backdrop-filter: blur(16px);
+      padding: 24px; border-radius: 16px; border: 1px solid var(--card-border);
+      box-shadow: 0 8px 32px rgba(0, 0, 0, 0.3); margin-bottom: 24px; max-width: 100%;
+    }
+
+    .card-title {
+      margin: 0 0 18px 0; font-size: 1rem; font-weight: 700; color: #ffffff;
+      display: flex; align-items: center; justify-content: center; gap: 10px;
+      border-bottom: 1px solid var(--card-border); padding-bottom: 12px; text-wrap: balance;
+    }
+    .card-title svg { color: var(--accent); flex-shrink: 0; }
+
+    label { display: block; margin: 14px 0 6px; font-size: 0.85rem; font-weight: 600; color: #cbd5e1; text-align: center; }
+
+    input[type="password"], textarea {
+      width: 100%; padding: 13px 15px; border-radius: 10px;
+      border: 1px solid var(--card-border); background: var(--input-bg);
+      color: var(--text-main); font-size: 15px; font-family: inherit;
+      transition: all 0.25s ease; box-shadow: inset 0 2px 4px rgba(0,0,0,0.2);
+      text-align: center;
+    }
+    textarea { font-family: 'JetBrains Mono', monospace; font-size: 0.8rem; text-align: left; resize: vertical; }
+    input:focus, textarea:focus {
+      border-color: var(--accent); outline: none;
+      box-shadow: 0 0 0 4px var(--accent-glow), inset 0 2px 4px rgba(0,0,0,0.2);
+    }
+
+    .btn {
+      display: inline-flex; align-items: center; justify-content: center; gap: 8px;
+      padding: 13px 22px; min-height: 46px; border-radius: 10px;
+      font-family: inherit; font-size: 0.9rem; font-weight: 700; cursor: pointer;
+      transition: all 0.25s ease; border: 1px solid var(--card-border);
+      background: var(--input-bg); color: var(--text-main); max-width: 100%;
+    }
+    .btn:hover:not(:disabled) { border-color: var(--accent); transform: translateY(-2px); }
+    .btn:disabled { opacity: 0.5; cursor: not-allowed; }
+    .btn.principal { background: var(--accent-gradient); border: none; color: #fff; box-shadow: 0 6px 20px var(--accent-glow); }
+    .btn.perigo { border-color: rgba(239, 68, 68, 0.4); color: #fca5a5; }
+    .btn.perigo:hover:not(:disabled) { border-color: var(--danger); background: rgba(239, 68, 68, 0.1); }
+    .btn.largo { width: 100%; margin-top: 14px; }
+
+    .linha-btn { display: flex; gap: 10px; flex-wrap: wrap; justify-content: center; margin-top: 14px; }
+
+    .nota {
+      font-size: 0.75rem; line-height: 1.6;
+      padding: 10px 12px; border-radius: 8px; margin-top: 12px;
+      background: rgba(245, 158, 11, 0.06); border: 1px solid rgba(245, 158, 11, 0.25);
+      color: #fbbf24;
+    }
+
+    .status-caixa {
+      margin-top: 14px; padding: 12px; border-radius: 10px; font-size: 0.8rem;
+      font-family: 'JetBrains Mono', monospace; text-align: left; line-height: 1.6;
+      background: rgba(5, 7, 15, 0.6); border: 1px solid var(--card-border);
+      max-height: 200px; overflow-y: auto; white-space: pre-wrap;
+      display: none;
+    }
+    .status-caixa.visivel { display: block; }
+
+    .info-arquivo {
+      margin-top: 10px; padding: 10px; border-radius: 8px; font-size: 0.75rem;
+      background: rgba(99, 102, 241, 0.08); border: 1px solid var(--card-border);
+      color: #a5b4fc; display: none;
+    }
+    .info-arquivo.visivel { display: block; }
+
+    .toggle-salvar { display: flex; align-items: center; justify-content: center; gap: 8px; margin-top: 12px; font-size: 0.78rem; color: var(--text-muted); }
+    .toggle-salvar input { width: 16px; height: 16px; accent-color: var(--accent); }
+
+    .spinner-mini {
+      width: 16px; height: 16px; border: 2px solid rgba(255,255,255,0.2);
+      border-top-color: #ffffff; border-radius: 50%; animation: spin 0.8s linear infinite;
+      display: none;
+    }
+    .spinner-mini.ativo { display: inline-block; }
+    @keyframes spin { to { transform: rotate(360deg); } }
+
+    footer { margin-top: 30px; font-size: 0.72rem; color: var(--text-muted); padding-top: 20px; border-top: 1px solid var(--card-border); }
+
+    @media (prefers-reduced-motion: reduce) {
+      *, *::before, *::after { transition-duration: 0.01ms !important; animation-duration: 0.01ms !important; }
+    }
+  </style>
+</head>
+<body>
+
+  <div class="container">
+
+    <header>
+      <div class="brand">
+        <h1>ViralScript <span>Operações</span></h1>
+      </div>
+      <div class="badge-admin">Área privada do dono</div>
+    </header>
+
+    <!-- ETAPA 1: TOKEN (Account ID já vem embutido no código) -->
+    <div class="card" id="card-credenciais">
+      <div class="card-title">
+        <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="11" width="18" height="11" rx="2" ry="2"></rect><path d="M7 11V7a5 5 0 0 1 10 0v4"></path></svg>
+        1 · Conectar ao Cloudflare
+      </div>
+
+      <label for="inp-token">API Token (permissão "Edit Cloudflare Workers"):</label>
+      <input type="password" id="inp-token" autocomplete="off" placeholder="Cole seu token aqui (nunca sai deste navegador)">
+
+      <div class="toggle-salvar">
+        <input type="checkbox" id="chk-salvar">
+        <label for="chk-salvar" style="margin:0;">Salvar token neste navegador (localStorage — só neste aparelho)</label>
+      </div>
+
+      <button type="button" class="btn principal largo" id="btn-testar">
+        <span class="spinner-mini" id="spin-testar"></span>
+        Testar conexão
+      </button>
+
+      <div class="nota">
+        Crie o token em: dash.cloudflare.com → My Profile → API Tokens → <strong>"Edit Cloudflare Workers"</strong> → copie. O token NUNCA é enviado ao seu worker nem a terceiros — esta página fala DIRETO com a API do Cloudflare. Nunca cole o token em conversas ou prints.
+      </div>
+    </div>
+
+    <!-- ETAPA 2: EDITOR/UPLOAD -->
+    <div class="card" id="card-editor" style="display:none;">
+      <div class="card-title">
+        <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M14.5 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V7.5L14.5 2z"></path><polyline points="14 2 14 8 20 8"></polyline></svg>
+        2 · Código do Worker
+      </div>
+
+      <div class="linha-btn">
+        <button type="button" class="btn" id="btn-baixar-atual">
+          <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"></path><polyline points="7 10 12 15 17 10"></polyline><line x1="12" y1="15" x2="12" y2="3"></line></svg>
+          Baixar backup do atual
+        </button>
+        <button type="button" class="btn" id="btn-escolher-arquivo">
+          <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"></path><polyline points="17 8 12 3 7 8"></polyline><line x1="12" y1="3" x2="12" y2="15"></line></svg>
+          Carregar worker.js do aparelho
+        </button>
+        <input type="file" id="inp-arquivo" accept=".js,.txt" hidden>
+      </div>
+
+      <div class="info-arquivo" id="info-arquivo"></div>
+
+      <label for="txt-worker">Conteúdo (editável — ou carregado do arquivo):</label>
+      <textarea id="txt-worker" rows="10" placeholder="Cole o código do worker aqui, ou use o botão acima para carregar o arquivo .js..."></textarea>
+
+      <div class="linha-btn">
+        <button type="button" class="btn" id="btn-validar">
+          <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polyline points="20 6 9 17 4 12"></polyline></svg>
+          Validar sintaxe (checklist)
+        </button>
+      </div>
+
+      <div class="status-caixa" id="status-validar"></div>
+
+      <button type="button" class="btn perigo largo" id="btn-publicar">
+        <span class="spinner-mini" id="spin-publicar"></span>
+        3 · Publicar no Cloudflare (substitui o worker atual)
+      </button>
+
+      <div class="nota" id="nota-publicar">
+        Antes de publicar, faça <strong>"Baixar backup do atual"</strong> — é seu rollback. A publicação substitui IMEDIATAMENTE o worker em produção (mesma URL).
+      </div>
+
+      <div class="status-caixa" id="status-publicar"></div>
+    </div>
+
+    <footer>
+      <p>Página privada · noindex · sem link na navegação</p>
+      <p>ViralScript AI · <a href="/" style="color:#a5b4fc;">voltar ao site</a></p>
+    </footer>
+  </div>
+
+  <script>
+    // ============================================================
+    // Página privada do dono — publica o worker.js no Cloudflare
+    // via API oficial. Account ID embutido (identificador público,
+    // sem poder de acesso). API Token: digitado pelo dono, salvo
+    // apenas no localStorage DELE. NUNCA innerHTML dinâmico.
+    // ============================================================
+
+    const NOME_WORKER = 'viralscriptai';
+    // v9.2.1 — Account ID embutido (identificador, não é segredo).
+    // O SEGREDO de verdade é o API Token, que só vive no navegador do dono.
+    const ACCOUNT_ID = 'COLE_SEU_ACCOUNT_ID_AQUI';
+
+    const LS_TOKEN = 'admin_cf_token';
+
+    let _toastTimer = null;
+
+    function $(id) { return document.getElementById(id); }
+
+    function mostrarStatus(caixaId, texto, erro) {
+      const caixa = $(caixaId);
+      caixa.textContent = texto;
+      caixa.classList.add('visivel');
+      caixa.style.color = erro ? '#fca5a5' : '#86efac';
+      caixa.style.borderColor = erro ? 'rgba(239,68,68,0.4)' : 'rgba(16,185,129,0.4)';
+    }
+
+    function mostrarToast(mensagem, erro = false) {
+      let toast = $('admin-toast');
+      if (!toast) {
+        toast = document.createElement('div');
+        toast.id = 'admin-toast';
+        toast.setAttribute('role', 'status');
+        toast.style.cssText = 'position:fixed;bottom:calc(24px + env(safe-area-inset-bottom,0px));left:50%;transform:translateX(-50%);padding:14px 20px;border-radius:12px;font-size:0.85rem;font-weight:700;text-align:center;line-height:1.45;z-index:3000;width:calc(100vw - 32px);max-width:440px;overflow-wrap:anywhere;color:#fff;box-shadow:0 12px 30px rgba(0,0,0,0.4);';
+        document.body.appendChild(toast);
+      }
+      clearTimeout(_toastTimer);
+      toast.textContent = mensagem;
+      toast.style.background = erro
+        ? 'linear-gradient(135deg, #ef4444 0%, #dc2626 100%)'
+        : 'linear-gradient(135deg, #10b981 0%, #059669 100%)';
+      toast.style.display = 'block';
+      _toastTimer = setTimeout(() => { toast.style.display = 'none'; }, 4000);
+    }
+
+    function spinner(id, ativo) {
+      $(id).classList.toggle('ativo', ativo);
+    }
+
+    function obterToken() {
+      const token = $('inp-token').value.trim();
+      if (!token) {
+        mostrarToast('Cole o API Token do Cloudflare.', true);
+        return null;
+      }
+      try {
+        if ($('chk-salvar').checked) {
+          localStorage.setItem(LS_TOKEN, token);
+        } else {
+          localStorage.removeItem(LS_TOKEN);
+        }
+      } catch (e) { /* ignora */ }
+      return token;
+    }
+
+    // ---------- TESTAR CONEXÃO ----------
+    async function testarConexao() {
+      const token = obterToken();
+      if (!token) return;
+      spinner('spin-testar', true);
+      $('btn-testar').disabled = true;
+      try {
+        const url = 'https://api.cloudflare.com/client/v4/accounts/' + encodeURIComponent(ACCOUNT_ID) + '/workers/scripts';
+        const res = await fetch(url, {
+          headers: { 'Authorization': 'Bearer ' + token }
+        });
+        const data = await res.json().catch(() => ({}));
+        if (!res.ok || !data.success) {
+          const erros = (data.errors || []).map(e => e.message).join(' | ');
+          throw new Error('Falha na API (HTTP ' + res.status + ')' + (erros ? ': ' + erros : ''));
+        }
+        const scripts = (data.result || []).map(s => s.id);
+        if (!scripts.includes(NOME_WORKER)) {
+          mostrarStatus('status-validar', 'Conectado ✓ — mas o worker "' + NOME_WORKER + '" não foi encontrado. Scripts: ' + (scripts.join(', ') || 'nenhum') + '.', true);
+          $('status-validar').classList.add('visivel');
+          $('card-editor').style.display = 'block';
+          $('card-editor').scrollIntoView({ behavior: 'smooth', block: 'start' });
+          return;
+        }
+        $('card-editor').style.display = 'block';
+        $('card-editor').scrollIntoView({ behavior: 'smooth', block: 'start' });
+        mostrarToast('✓ Conectado! Worker "' + NOME_WORKER + '" encontrado.');
+      } catch (err) {
+        mostrarToast(err.message || 'Falha de rede ao testar conexão.', true);
+      } finally {
+        spinner('spin-testar', false);
+        $('btn-testar').disabled = false;
+      }
+    }
+
+    // ---------- BACKUP DO WORKER ATUAL ----------
+    async function baixarBackup() {
+      const token = obterToken();
+      if (!token) return;
+      spinner('spin-testar', true);
+      $('btn-baixar-atual').disabled = true;
+      try {
+        const url = 'https://api.cloudflare.com/client/v4/accounts/' + encodeURIComponent(ACCOUNT_ID) + '/workers/scripts/' + encodeURIComponent(NOME_WORKER);
+        const res = await fetch(url, {
+          headers: { 'Authorization': 'Bearer ' + token }
+        });
+        if (!res.ok) throw new Error('Falha ao baixar (HTTP ' + res.status + ').');
+        const texto = await res.text();
+        const dataISO = new Date().toISOString().slice(0, 19).replace(/[:T]/g, '-');
+        const blob = new Blob([texto], { type: 'text/javascript' });
+        const urlBlob = URL.createObjectURL(blob);
+        const a = document.createElement('a');
+        a.href = urlBlob;
+        a.download = 'worker-backup-' + dataISO + '.js';
+        document.body.appendChild(a);
+        a.click();
+        a.remove();
+        setTimeout(() => URL.revokeObjectURL(urlBlob), 1000);
+        mostrarToast('✓ Backup baixado (' + Math.round(texto.length / 1024) + ' KB) — guarde como rollback!');
+      } catch (err) {
+        mostrarToast(err.message || 'Falha ao baixar o backup.', true);
+      } finally {
+        spinner('spin-testar', false);
+        $('btn-baixar-atual').disabled = false;
+      }
+    }
+
+    // ---------- UPLOAD DO ARQUIVO ----------
+    function carregarArquivo() {
+      const arquivo = $('inp-arquivo').files && $('inp-arquivo').files[0];
+      if (!arquivo) return;
+
+      const leitor = new FileReader();
+      leitor.onload = () => {
+        const conteudo = String(leitor.result || '');
+        $('txt-worker').value = conteudo;
+        const info = $('info-arquivo');
+        info.textContent = '✓ "' + arquivo.name + '" — ' + Math.round(arquivo.size / 1024) + ' KB, ' + conteudo.split('\n').length + ' linhas.';
+        info.classList.add('visivel');
+        mostrarToast('✓ Arquivo carregado! Valide a sintaxe e publique.');
+      };
+      leitor.onerror = () => {
+        mostrarToast('Não foi possível ler o arquivo.', true);
+      };
+      leitor.readAsText(arquivo);
+    }
+
+    // ---------- VALIDAÇÃO (checklist pré-deploy — lição v8.8.4) ----------
+    function validarCodigo() {
+      const codigo = $('txt-worker').value;
+      const caixa = $('status-validar');
+      caixa.classList.add('visivel');
+
+      const problemas = [];
+
+      if (!codigo.trim()) {
+        problemas.push('O código está vazio.');
+      } else {
+        if (/for\s*\(\s*(const|let|var)\s+\w+\s+de\s+/i.test(codigo)) {
+          problemas.push('Encontrado "for (... de ...)" — provável erro: deveria ser "of".');
+        }
+        if (!/export default/.test(codigo)) {
+          problemas.push('Falta "export default" no final (worker é módulo ES).');
+        }
+        if (!/async fetch\s*\(/.test(codigo)) {
+          problemas.push('Falta "async fetch(request, env, ctx)" no export default.');
+        }
+        if (!/PROMPT_TEMPLATE/.test(codigo)) {
+          problemas.push('PROMPT_TEMPLATE não encontrado — arquivo correto do worker?');
+        }
+        const abre = (codigo.match(/{/g) || []).length;
+        const fecha = (codigo.match(/}/g) || []).length;
+        if (Math.abs(abre - fecha) > 2) {
+          problemas.push('Chaves { } desbalanceadas (' + abre + ' vs ' + fecha + ').');
+        }
+        if (!/;\s*$/.test(codigo.trim())) {
+          problemas.push('O arquivo não termina com ";" — possível truncamento.');
+        }
+        if (codigo.length < 20000) {
+          problemas.push('Arquivo suspeito de truncado (' + Math.round(codigo.length / 1024) + ' KB — o worker completo tem ~90 KB).');
+        }
+      }
+
+      if (problemas.length) {
+        caixa.style.color = '#fca5a5';
+        caixa.style.borderColor = 'rgba(239,68,68,0.4)';
+        caixa.textContent = '❌ VALIDAÇÃO — ' + problemas.length + ' problema(s):\n\n' + problemas.map((p, i) => (i + 1) + '. ' + p).join('\n');
+        return false;
+      }
+
+      caixa.style.color = '#86efac';
+      caixa.style.borderColor = 'rgba(16,185,129,0.4)';
+      caixa.textContent = '✓ CHECKLIST OK — estrutura esperada encontrada.\n\nA validação é heurística — o Cloudflare valida a sintaxe real na publicação (e se falhar, o worker anterior CONTINUA no ar).';
+      return true;
+    }
+
+    // ---------- PUBLICAR ----------
+    async function publicar() {
+      const token = obterToken();
+      if (!token) return;
+
+      const codigo = $('txt-worker').value;
+
+      if (!codigo.trim()) {
+        mostrarToast('Nada para publicar — cole ou carregue o código.', true);
+        return;
+      }
+
+      if (!confirm('Publicar AGORA substitui o worker em PRODUÇÃO (mesma URL, todos os usuários). Confirma?\n\n(Dica: já fez o backup do atual?)')) {
+        return;
+      }
+
+      if (!validarCodigo()) {
+        mostrarToast('Corrija os problemas da validação antes de publicar.', true);
+        return;
+      }
+
+      spinner('spin-publicar', true);
+      $('btn-publicar').disabled = true;
+
+      try {
+        const url = 'https://api.cloudflare.com/client/v4/accounts/' + encodeURIComponent(ACCOUNT_ID) + '/workers/scripts/' + encodeURIComponent(NOME_WORKER);
+
+        const metadata = {
+          main_module: 'worker.js',
+          compatibility_date: '2024-09-01'
+        };
+
+        const form = new FormData();
+        form.append('metadata', new Blob([JSON.stringify(metadata)], { type: 'application/json' }));
+        form.append('worker.js', new Blob([codigo], { type: 'text/javascript' }), 'worker.js');
+
+        const res = await fetch(url, {
+          method: 'PUT',
+          headers: { 'Authorization': 'Bearer ' + token },
+          body: form
+        });
+
+        const data = await res.json().catch(() => ({}));
+
+        if (!res.ok || !data.success) {
+          const erros = (data.errors || []).map(e => e.message + (e.line ? ' (linha ' + e.line + ')' : '')).join(' | ');
+          throw new Error('FALHA NA PUBLICAÇÃO (HTTP ' + res.status + ')' + (erros ? ': ' + erros : '') + '\n\nO worker anterior CONTINUA no ar — nada foi quebrado.');
+        }
+
+        const caixa = $('status-publicar');
+        caixa.classList.add('visivel');
+        caixa.style.color = '#86efac';
+        caixa.style.borderColor = 'rgba(16,185,129,0.4)';
+        caixa.textContent = '✓ PUBLICADO COM SUCESSO!\n\nVersão nova no ar: https://viralscriptai.tiodaweb03.workers.dev\nID da versão: ' + ((data.result && data.result.id) || 'n/d') + '\n\nTeste o site: 1 roteiro + 1 thumbnail.';
+
+        mostrarToast('✓ Worker publicado com sucesso!');
+      } catch (err) {
+        mostrarStatus('status-publicar', (err.message || 'Falha ao publicar.'), true);
+        mostrarToast('Falha na publicação — veja os detalhes.', true);
+      } finally {
+        spinner('spin-publicar', false);
+        $('btn-publicar').disabled = false;
+      }
+    }
+
+    // ---------- INIT ----------
+    document.addEventListener('DOMContentLoaded', () => {
+      // Carrega token salvo (se existir)
+      try {
+        const t = localStorage.getItem(LS_TOKEN);
+        if (t) {
+          $('inp-token').value = t;
+          $('chk-salvar').checked = true;
+        }
+      } catch (e) { /* localStorage indisponível */ }
+
+      // Account ID embutido — validação de preenchimento
+      if (ACCOUNT_ID === 'COLE_SEU_ACCOUNT_ID_AQUI' || ACCOUNT_ID.length < 20) {
+        // Aviso no console para o dono (não expõe nada ao visitante)
+        console.warn('[Admin] Substitua ACCOUNT_ID no código pelo seu Account ID do Cloudflare.');
+      }
+
+      $('btn-testar').addEventListener('click', testarConexao);
+      $('btn-baixar-atual').addEventListener('click', baixarBackup);
+      $('btn-escolher-arquivo').addEventListener('click', () => $('inp-arquivo').click());
+      $('inp-arquivo').addEventListener('change', carregarArquivo);
+      $('btn-validar').addEventListener('click', () => {
+        if (!validarCodigo()) mostrarToast('Problemas na validação — veja os detalhes.', true);
+      });
+      $('btn-publicar').addEventListener('click', publicar);
+    });
+  </script>
+</body>
+</html>
